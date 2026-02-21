@@ -1,0 +1,121 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "timeseries_db_core"
+version = "0.1.0"
+description = "Core time-series database library with numeric and categorical series support"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Author Name", email = "author@example.com"}
+]
+requires-python = ">=3.10"
+
+dependencies = [
+    "sqlalchemy>=2.0.0",
+    "psycopg2-binary>=2.9.0",
+    "python-dotenv>=0.21.0",
+    "alembic>=1.12.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["models", "models.*"]
+
+
+[project.optional-dependencies]
+# Optional dependencies for development and testing.
+dev = [
+    "ruff>=0.1.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "black>=23.0.0",
+    "mypy>=1.5.0",
+    "alembic>=1.12.0",
+]
+
+[tool.ruff]
+
+#Configuration for Ruff - Python linter and formatter.
+
+#Ruff is used to enforce code quality and style guidelines throughout the project.
+#All code must follow Google Python Style Guide conventions.
+
+# Target Python version
+target-version = "py310"
+
+# Set line length
+line-length = 88
+
+# Enable specific rule sets
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # Pyflakes
+    "I",      # isort
+    "C",      # flake8-comprehensions
+    "B",      # flake8-bugbear
+    "D",      # pydocstyle
+    "UP",     # pyupgrade
+    "A",      # flake8-builtins
+    "S",      # flake8-bandit (security)
+    "SIM",    # flake8-simplify
+]
+
+# Rules to ignore
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "D100",   # Missing module docstring (we use module docstrings)
+    "D104",   # Missing package docstring
+    "D203",   # 1 blank line required before class docstring
+    "D213",   # Multi-line docstring summary should start at the next line
+]
+
+# Exclude patterns
+exclude = [
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    ".idea",
+    "*.egg-info",
+    "dist",
+    "build",
+]
+
+[tool.ruff.isort]
+#Configuration for isort (import sorting) within Ruff.
+#Ensures consistent import ordering following PEP 8 conventions.
+
+profile = "black"
+line-length = 88
+known-first-party = ["models"]
+
+[tool.ruff.pydocstyle]
+#Configuration for pydocstyle (docstring checking) within Ruff.
+#Enforces docstring standards for better code documentation.
+convention = "google"
+
+[tool.pytest.ini_options]
+#Configuration for pytest test runner.
+#Specifies test discovery patterns and coverage options.
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--cov=models",
+    "--cov-report=html",
+    "--cov-report=term-missing",
+]
+
+[tool.mypy]
+#Configuration for mypy static type checker.
+#Ensures type safety across the codebase.
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false  # Gradually enforce type hints
+ignore_missing_imports = true

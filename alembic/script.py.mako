@@ -1,0 +1,34 @@
+"""${message}
+
+Revision ID: ${up_revision}
+Revises: ${down_revision | comma,n}
+Create Date: ${create_date}
+
+"""
+from alembic import op
+import sqlalchemy as sa
+${imports if imports else ""}
+
+# revision identifiers, used by Alembic.
+revision = ${repr(up_revision)}
+down_revision = ${repr(down_revision)}
+branch_labels = ${repr(branch_labels)}
+depends_on = ${repr(depends_on)}
+
+
+def upgrade() -> None:
+    """Apply migration upgrade.
+
+    This function contains the steps necessary to upgrade the database
+    schema to the current revision.
+    """
+    ${upgrades if upgrades else "pass"}
+
+
+def downgrade() -> None:
+    """Apply migration downgrade.
+
+    This function contains the steps necessary to downgrade the database
+    schema to the previous revision.
+    """
+    ${downgrades if downgrades else "pass"}
