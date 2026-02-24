@@ -23,7 +23,7 @@ class Measurement(Base):
     for accurate distributed system time handling.
 
     Attributes:
-        time: The time at which the measurement was taken (with timezone).
+        timestamp: The time at which the measurement was taken (with timezone).
         series_id: Foreign key reference to the associated SeriesCatalog.
         value: The numeric (double precision) value of the measurement.
         series: Relationship to the associated SeriesCatalog object.
@@ -33,7 +33,7 @@ class Measurement(Base):
 
     # Time column is part of composite primary key (implicit in time-series context)
     timestamp = Column(TIMESTAMP(timezone=True), nullable=False, index=True, primary_key=True)
-    series_id = Column(Integer, ForeignKey("series_catalog.id", ondelete="CASCADE"), nullable=False, index=True)
+    series_id = Column(Integer, ForeignKey("series_catalog.id", ondelete="CASCADE"), nullable=False, index=True, primary_key=True)
     value = Column(Float, nullable=True)
 
     # Relationships

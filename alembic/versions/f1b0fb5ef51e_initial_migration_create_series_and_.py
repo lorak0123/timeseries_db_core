@@ -1,8 +1,8 @@
 """Initial migration: create series and measurements tables
 
-Revision ID: 58cc1598d47a
+Revision ID: f1b0fb5ef51e
 Revises: 
-Create Date: 2026-02-21 11:01:59.894668
+Create Date: 2026-02-21 13:59:57.459161
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = '58cc1598d47a'
+revision = 'f1b0fb5ef51e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,7 +52,7 @@ def upgrade() -> None:
     sa.Column('series_id', sa.Integer(), nullable=False),
     sa.Column('value', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['series_id'], ['categories_catalog.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('timestamp')
+    sa.PrimaryKeyConstraint('timestamp', 'series_id')
     )
     op.create_index('idx_categorical_series_id', 'categorical_measurements', ['series_id'], unique=False)
     op.create_index('idx_categorical_time', 'categorical_measurements', ['timestamp'], unique=False, postgresql_using='btree')
@@ -63,7 +63,7 @@ def upgrade() -> None:
     sa.Column('series_id', sa.Integer(), nullable=False),
     sa.Column('value', sa.Float(), nullable=True),
     sa.ForeignKeyConstraint(['series_id'], ['series_catalog.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('timestamp')
+    sa.PrimaryKeyConstraint('timestamp', 'series_id')
     )
     op.create_index('idx_measurements_series_id', 'measurements', ['series_id'], unique=False)
     op.create_index('idx_measurements_time', 'measurements', ['timestamp'], unique=False, postgresql_using='btree')

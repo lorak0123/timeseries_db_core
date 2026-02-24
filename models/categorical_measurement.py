@@ -23,7 +23,7 @@ class CategoricalMeasurement(Base):
     typically maps to a state via the state_mapping in the parent CategoriesCatalog.
 
     Attributes:
-        time: The time at which the measurement was taken (with timezone).
+        timestamp: The time at which the measurement was taken (with timezone).
         series_id: Foreign key reference to the associated CategoriesCatalog.
         value: The categorical value as a small integer (e.g., 0, 1, 2).
         series: Relationship to the associated CategoriesCatalog object.
@@ -33,7 +33,7 @@ class CategoricalMeasurement(Base):
 
     # Time column is part of composite primary key (implicit in time-series context)
     timestamp = Column(TIMESTAMP(timezone=True), nullable=False, index=True, primary_key=True)
-    series_id = Column(Integer, ForeignKey("categories_catalog.id", ondelete="CASCADE"), nullable=False, index=True)
+    series_id = Column(Integer, ForeignKey("categories_catalog.id", ondelete="CASCADE"), nullable=False, index=True, primary_key=True)
     value = Column(Integer, nullable=False)  # SMALLINT equivalent
 
     # Relationships
