@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["models", "models.*"]
+include = ["timeseries_db_core", "timeseries_db_core.*"]
 
 
 [project.optional-dependencies]

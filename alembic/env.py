@@ -22,11 +22,11 @@ if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 # Add your model's MetaData object for 'autogenerate' support
-from models.base import Base
+from timeseries_db_core.models.base import Base
 target_metadata = Base.metadata
 
 # Import database configuration
-from database import DatabaseConfig
+from timeseries_db_core.database import DatabaseConfig
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.

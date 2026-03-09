@@ -85,8 +85,9 @@ Replace `user` and `password` with your PostgreSQL credentials.
 ### 4. Verify Database Connection
 
 Test the connection by running a Python script:
+
 ```python
-from database import DatabaseConfig
+from timeseries_db_core.database import DatabaseConfig
 
 engine = DatabaseConfig.get_engine()
 print("Database connection successful!")
@@ -138,18 +139,18 @@ The package provides four main models for managing time-series data:
 Represents a named numeric time-series that can collect multiple measurement points.
 
 ```python
-from models import SeriesCatalog
-from database import DatabaseConfig
+from timeseries_db_core.models import SeriesCatalog
+from timeseries_db_core.database import DatabaseConfig
 
 Session = DatabaseConfig.get_session_factory()
 session = Session()
 
 # Create a new numeric series
 series = SeriesCatalog(
-    name="cpu_usage",
-    tags={"host": "server1", "location": "datacenter1"},
-    description="CPU usage percentage for server1",
-    aggregation_method="mean"
+   name="cpu_usage",
+   tags={"host": "server1", "location": "datacenter1"},
+   description="CPU usage percentage for server1",
+   aggregation_method="mean"
 )
 
 session.add(series)
@@ -169,8 +170,8 @@ session.commit()
 Stores individual numeric measurements for a numeric series.
 
 ```python
-from models import SeriesCatalog, Measurement
-from database import DatabaseConfig
+from timeseries_db_core.models import SeriesCatalog, Measurement
+from timeseries_db_core.database import DatabaseConfig
 from datetime import datetime, timezone
 
 Session = DatabaseConfig.get_session_factory()
@@ -181,9 +182,9 @@ series = session.query(SeriesCatalog).filter_by(name="cpu_usage").first()
 
 # Add measurements
 measurement = Measurement(
-    timestamp=datetime.now(timezone.utc),
-    series_id=series.id,
-    value=45.5
+   timestamp=datetime.now(timezone.utc),
+   series_id=series.id,
+   value=45.5
 )
 
 session.add(measurement)
@@ -201,18 +202,18 @@ session.commit()
 Represents a named categorical time-series with discrete value states.
 
 ```python
-from models import CategoriesCatalog
-from database import DatabaseConfig
+from timeseries_db_core.models import CategoriesCatalog
+from timeseries_db_core.database import DatabaseConfig
 
 Session = DatabaseConfig.get_session_factory()
 session = Session()
 
 # Create a categorical series
 categories = CategoriesCatalog(
-    name="server_status",
-    tags={"host": "server1"},
-    state_mapping={"0": "offline", "1": "online", "2": "error"},
-    description="Server operational status"
+   name="server_status",
+   tags={"host": "server1"},
+   state_mapping={"0": "offline", "1": "online", "2": "error"},
+   description="Server operational status"
 )
 
 session.add(categories)
@@ -232,8 +233,8 @@ session.commit()
 Stores individual categorical measurements for a categorical series.
 
 ```python
-from models import CategoriesCatalog, CategoricalMeasurement
-from database import DatabaseConfig
+from timeseries_db_core.models import CategoriesCatalog, CategoricalMeasurement
+from timeseries_db_core.database import DatabaseConfig
 from datetime import datetime, timezone
 
 Session = DatabaseConfig.get_session_factory()
@@ -241,14 +242,14 @@ session = Session()
 
 # Get the categorical series
 categories = session.query(CategoriesCatalog).filter_by(
-    name="server_status"
+   name="server_status"
 ).first()
 
 # Add categorical measurements
 measurement = CategoricalMeasurement(
-    timestamp=datetime.now(timezone.utc),
-    series_id=categories.id,
-    value=1  # Corresponds to "online" in state_mapping
+   timestamp=datetime.now(timezone.utc),
+   series_id=categories.id,
+   value=1  # Corresponds to "online" in state_mapping
 )
 
 session.add(measurement)
@@ -266,8 +267,8 @@ session.commit()
 Here's a complete example demonstrating the workflow:
 
 ```python
-from models import SeriesCatalog, Measurement
-from database import DatabaseConfig
+from timeseries_db_core.models import SeriesCatalog, Measurement
+from timeseries_db_core.database import DatabaseConfig
 from datetime import datetime, timezone, timedelta
 
 # Get database session
@@ -275,42 +276,42 @@ SessionLocal = DatabaseConfig.get_session_factory()
 session = SessionLocal()
 
 try:
-    # 1. Create a numeric series
-    series = SeriesCatalog(
-        name="temperature",
-        tags={"location": "room1", "unit": "celsius"},
-        description="Room temperature readings",
-        aggregation_method="mean"
-    )
-    session.add(series)
-    session.flush()  # Get the auto-generated ID
-    
-    # 2. Add measurements
-    now = datetime.now(timezone.utc)
-    for i in range(10):
-        measurement = Measurement(
-            timestamp=now - timedelta(minutes=i),
-            series_id=series.id,
-            value=20.5 + i * 0.1
-        )
-        session.add(measurement)
-    
-    # 3. Commit all changes
-    session.commit()
-    
-    # 4. Query the data
-    measurements = session.query(Measurement)\
-        .filter_by(series_id=series.id)\
-        .order_by(Measurement.timestamp.desc())\
-        .limit(5)\
-        .all()
-    
-    print(f"Latest 5 measurements:")
-    for m in measurements:
-        print(f"  {m.timestamp}: {m.value}")
+   # 1. Create a numeric series
+   series = SeriesCatalog(
+      name="temperature",
+      tags={"location": "room1", "unit": "celsius"},
+      description="Room temperature readings",
+      aggregation_method="mean"
+   )
+   session.add(series)
+   session.flush()  # Get the auto-generated ID
+
+   # 2. Add measurements
+   now = datetime.now(timezone.utc)
+   for i in range(10):
+      measurement = Measurement(
+         timestamp=now - timedelta(minutes=i),
+         series_id=series.id,
+         value=20.5 + i * 0.1
+      )
+      session.add(measurement)
+
+   # 3. Commit all changes
+   session.commit()
+
+   # 4. Query the data
+   measurements = session.query(Measurement)
+   .filter_by(series_id=series.id)
+   .order_by(Measurement.timestamp.desc())
+   .limit(5)
+   .all()
+
+print(f"Latest 5 measurements:")
+for m in measurements:
+   print(f"  {m.timestamp}: {m.value}")
 
 finally:
-    session.close()
+session.close()
 ```
 
 ## Database Schema Overview
