@@ -9,8 +9,9 @@ Google Python Style Guide conventions are followed throughout.
 """
 
 import datetime
+
 from sqlalchemy import Column, Integer, String, DateTime, Text, Index
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from .base import Base
@@ -38,8 +39,8 @@ class CategoriesCatalog(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(500), nullable=False, index=True)
-    tags = Column(JSON, default=[], nullable=False)
-    state_mapping = Column(JSON, default={}, nullable=False)
+    tags = Column(JSONB, default=[], nullable=False)
+    state_mapping = Column(JSONB, default={}, nullable=False)
     description = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.now(datetime.UTC), nullable=False)
 
