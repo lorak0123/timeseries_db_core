@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Updated project structure to fit new requirements and best practices
+- Fix references in tag-based queries to use categories_catalog instead of series_catalog
 
 ## [0.1.0] - 2026-03-09
 
