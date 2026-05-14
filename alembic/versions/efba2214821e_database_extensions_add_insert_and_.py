@@ -109,22 +109,22 @@ def upgrade() -> None:
     BEGIN
         -- Find the absolute minimum time
         IF start_time IS NULL THEN
-            SELECT min(m.timestamp)
+            SELECT min(cm.timestamp)
             INTO v_start
             FROM categorical_measurements cm
-            JOIN series_catalog sc ON m.series_id = sc.id
-            WHERE sc.tags::jsonb @> get_categorical_by_tags.tags;
+            JOIN categories_catalog cc ON cm.series_id = cc.id
+            WHERE cc.tags::jsonb @> get_categorical_by_tags.tags;
         ELSE
             v_start := start_time;
         END IF;
     
         -- Find the absolute maximum time
         IF end_time IS NULL THEN
-            SELECT max(m.timestamp)
+            SELECT max(cm.timestamp)
             INTO v_end
             FROM categorical_measurements cm
-                    JOIN series_catalog sc ON cm.series_id = sc.id
-            WHERE sc.tags::jsonb @> get_categorical_by_tags.tags;
+            JOIN categories_catalog cc ON cm.series_id = cc.id
+            WHERE cc.tags::jsonb @> get_categorical_by_tags.tags;
         ELSE
             v_end := end_time;
         END IF;
